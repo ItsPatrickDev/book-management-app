@@ -50,7 +50,6 @@
 
     addToShelf: function (id, shelfId) {
         var data = {
-            __RequestVerificationToken: $('#__AjaxAntiForgeryForm input[name=__RequestVerificationToken]').val(),
             bookId: id,
             shelfId: shelfId
         };
