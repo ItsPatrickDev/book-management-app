@@ -57,6 +57,7 @@ namespace BooksManager.WebApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateShelf(Shelf shelf)
         {
             if (!ModelState.IsValid)
