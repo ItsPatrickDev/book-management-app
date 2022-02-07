@@ -1,0 +1,81 @@
+﻿@using BooksManager.Business.Models.View
+@using BooksManager.WebApp.Extensions
+@model BookShelfViewModel
+@{
+    ViewData["Title"] = "Favourites";
+}
+
+<div class="info-container" style="margin-top: 40px;">
+    <div class="shelf-header">
+        <i onclick="pageJS.goToShelves()" class="bi bi-chevron-left arrow-back"></i><h3>@Model.Shelf.Name</h3>
+    </div>
+</div>
+<hr />
+<div class="container">
+    @if (!Model.Books.Any())
+    {
+        <p>No books</p>
+    }
+    else
+    {
+        <div class="table-responsive table-container">
+            <table class="table" data-shelfId="@Model.Shelf.Id">
+                <tr>
+                    <th style="width: 25%">Title</th>
+                    <th style="width: 20%">Author</th>
+                    <th style="width: 15%">Genre</th>
+                    <th style="width: 15%">Status</th>
+                    <th style="width: 10%">IsHardCover</th>
+                    <th style="width: 5%"></th>
+                </tr>
+                @foreach (var book in Model.Books)
+                {
+                    <tr data-id="@book.Id">
+                        <td>@book.Title</td>
+                        <td>@book.Author</td>
+                        <td>@book.Genre.GetDisplayName()</td>
+                        <td>@book.Status.GetDisplayName()</td>
+                        @if (book.IsHardCover)
+                        {
+                            <td>Yes</td>
+                        }
+                        else
+                        {
+                            <td>No</td>
+                        }
+                        <td>
+                            <button type="button" class="btn btn-sm btn-danger removeBook"><i style="color: #fff; font-size: 13px;" class="bi bi-trash-fill"></i></button>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+</div>
+
+<!--Modals-->
+
+<div class="modal fade" id="removeBookFromShelfModal" tabindex="-1" role="dialog" aria-labelledby="removeBookFromShelfModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="removeBookFromShelfModalLabel">Remove book</h5>
+                <i class="bi bi-x-lg" data-dismiss="modal" aria-label="Close" style="cursor: pointer;"></i>
+            </div>
+            <div class="modal-body alert-warning">
+                <p>Are you sure you want remove from shelf?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="removeBookFromShelf">Remove</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/shelves/shelf-view.js"></script>
+<script>
+    $(document).ready(function () {
+        pageJS.setPage();
+    })
+</script>

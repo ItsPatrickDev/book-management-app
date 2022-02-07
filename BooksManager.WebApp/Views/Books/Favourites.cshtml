@@ -1,0 +1,48 @@
+﻿@using BooksManager.Business.Models
+@using BooksManager.WebApp.Extensions
+@model IEnumerable<BookModel>
+@{
+    ViewData["Title"] = "Favourites";
+}
+
+<div class="info-container" style="margin-top: 40px;">
+    <h3>Favourites</h3>
+</div>
+<hr />
+@if (!Model.Any())
+{
+    <p>No favourites</p>
+}
+else
+{
+    <div class="table-responsive table-container">
+        <table class="table">
+            <tr>
+                <th style="width: 25%">Title</th>
+                <th style="width: 20%">Author</th>
+                <th style="width: 10%">Genre</th>
+                <th style="width: 15%">Status</th>
+                <th style="width: 10%">IsHardCover</th>
+                <th style="width: 10%">CreationDate</th>
+            </tr>
+            @foreach (var book in Model)
+            {
+                <tr data-id="@book.Id">
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.Genre.GetDisplayName()</td>
+                    <td>@book.Status.GetDisplayName()</td>
+                    @if (book.IsHardCover)
+                    {
+                        <td>Yes</td>
+                    }
+                    else
+                    {
+                        <td>No</td>
+                    }
+                    <td>@book.CreationDate.ToString("yyyy-MM-dd")</td>
+                </tr>
+            }
+        </table>
+    </div>
+}

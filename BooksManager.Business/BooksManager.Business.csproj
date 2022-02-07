@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BooksManager.Data\BooksManager.Data.csproj" />
+    <ProjectReference Include="..\BooksManager.Domain\BooksManager.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

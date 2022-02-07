@@ -1,0 +1,128 @@
+﻿@using BooksManager.Business.Models
+@using BooksManager.WebApp.Extensions
+@model IEnumerable<BookModel>
+@{
+    ViewData["Title"] = "Home";
+    var bookshelves = (IEnumerable<ShelfModel>)ViewBag.Bookshelves;
+}
+
+<div class="info-container" style="margin-top: 40px;">
+    <h3>My Books</h3>
+    <a class="btn btn-primary" asp-action="AddBook" asp-controller="Books">Add Book</a>
+</div>
+<hr />
+<div id="content">
+    @if (!Model.Any())
+    {
+        <p>No books</p>
+    }
+    else
+    {
+        <div class="table-responsive table-container" id="booksTableContainer">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 10%">IsFav</th>
+                        <th style="width: 25%">Title</th>
+                        <th style="width: 20%">Author</th>
+                        <th style="width: 10%">Genre</th>
+                        <th style="width: 15%">Status</th>
+                        <th style="width: 5%">IsHardCover</th>
+                        <th style="width: 15%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var book in Model)
+                    {
+                        <tr data-id="@book.Id">
+                            <td><i onclick="pageJS.setBookFavourite(this)" style="color: gold; cursor: pointer;" class="bi @(book.IsFavourite ? "bi-star-fill" : "bi-star")"></i></td>
+                            <td>@book.Title</td>
+                            <td>@book.Author</td>
+                            <td>@book.Genre.GetDisplayName()</td>
+                            <td>@book.Status.GetDisplayName()</td>
+                            @if (book.IsHardCover)
+                            {
+                                <td>Yes</td>
+                            }
+                            else
+                            {
+                                <td>No</td>
+                            }
+                            <td class="info-container">
+                                <button type="button" class="btn btn-sm btn-primary editBook"><i style="color: #fff; font-size: 13px;" class="bi bi-pencil-fill"></i></button>
+                                <button type="button" class="btn btn-sm btn-danger removeBook"><i style="color: #fff; font-size: 13px;" class="bi bi-trash-fill"></i></button>
+                                <button type="button" class="btn btn-sm btn-success addToBookshelf"><i style="color: #fff; font-size: 13px;" class="bi bi-plus-lg"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="removeBookModal" tabindex="-1" role="dialog" aria-labelledby="removeBookModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="removeBookModalLabel">Remove book</h5>
+                <i class="bi bi-x-lg" data-dismiss="modal" aria-label="Close" style="cursor: pointer;"></i>
+            </div>
+            <div class="modal-body alert-warning">
+                <p>Are you sure you want remove this book?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="removeBook">Remove</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="alreadyExistsInShelfModal" tabindex="-1" role="dialog" aria-labelledby="alreadyExistsInShelfModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alreadyExistsInShelfModalLabel">Shelf</h5>
+                <i class="bi bi-x-lg" data-dismiss="modal" aria-label="Close" style="cursor: pointer;"></i>
+            </div>
+            <div class="modal-body alert-warning">
+                <p id="alreadyExistsInShelf"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addToBookshelfModal" tabindex="-1" role="dialog" aria-labelledby="addToBookshelfModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addToBookshelfModalLabel">Select Bookshelf</h5>
+                <i class="bi bi-x-lg" data-dismiss="modal" aria-label="Close" style="cursor: pointer;"></i>
+            </div>
+            <div class="modal-body">
+                <select id="selectedBookshelf">
+                    <option value="0">Select</option>
+                    @foreach (var bookshelf in bookshelves)
+                    {
+                        <option value="@bookshelf.Id">@bookshelf.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" id="confirmAddToBookshelf">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/home/index-view.js"></script>
+<script>
+    $(document).ready(function () {
+        pageJS.setPage();
+    })
+</script>

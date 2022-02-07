@@ -1,0 +1,61 @@
+﻿@using BooksManager.Domain.Enums
+@using BooksManager.WebApp.Extensions
+@model BooksManager.Domain.Entities.Book
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="info-container" style="margin-top: 40px; margin-bottom: 30px;">
+    <div class="shelf-header">
+        <i onclick="pageJS.goBack()" class="bi bi-chevron-left arrow-back"></i><h3>Add Book</h3>
+    </div>
+</div>
+<hr />
+<div class="container">
+    <form asp-action="AddBook" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="CreationDate" value="@DateTime.Now" />
+        <div class="mb-3">
+            <label for="titleInput" class="form-label">Title</label>
+            <input asp-for="Title" type="text" class="form-control" id="titleInput">
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="authorInput" class="form-label">Author</label>
+            <input asp-for="Author" type="text" class="form-control" id="authorInput">
+            <span asp-validation-for="Author" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="genreInput" class="form-label">Genre</label><br />
+            <select asp-for="Genre" class="form-select" aria-label=".form-select-sm example" id="genreInput">
+                @foreach (var genre in Enum.GetValues(typeof(Genre)))
+                {
+                    <option value="@((int)genre)">@genre</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="authorInput" class="form-label">Genre</label><br />
+            <select asp-for="Status" class="form-select" aria-label=".form-select-sm example">
+                @foreach (var status in Enum.GetValues(typeof(BookStatus)))
+                {
+                    <option value="@((int)status)">@status</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3 form-check">
+            <input asp-for="IsHardCover" type="checkbox" class="form-check-input" id="isHardcover" />
+            <label class="form-check-label" for="isHardcover">Is hardcover</label>
+        </div>
+        <div class="mb-3 form-check">
+            <input asp-for="IsFavourite" type="checkbox" class="form-check-input" id="isFavourite" />
+            <label class="form-check-label" for="isFavourite">Is favourite</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Add book</button>
+        <a class="btn btn-secondary" asp-action="Index" asp-controller="Home">Cancel</a>
+    </form>
+</div>
+
+<script src="~/js/common-view.js"></script>
